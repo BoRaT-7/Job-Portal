@@ -1,17 +1,41 @@
 // src/pages/Home/Home.jsx
 import React from "react";
 import { motion } from "framer-motion";
+import { FaUserTie } from "react-icons/fa";
+import { FaLaptopCode } from "react-icons/fa6";
+import { FaClipboardCheck } from "react-icons/fa";
 import jobSearch from "../../assets/job search.jpg";
 import jobHome from "../../assets/4236127.jpg";
+
+const stats = [
+  {
+    id: 1,
+    icon: <FaUserTie className="text-3xl text-[#ff6b3d]" />,
+    label: "Freelance Developers",
+    value: "919207",
+  },
+  {
+    id: 2,
+    icon: <FaLaptopCode className="text-3xl text-[#ff6b3d]" />,
+    label: "Developers Per Project",
+    value: "25100",
+  },
+  {
+    id: 3,
+    icon: <FaClipboardCheck className="text-3xl text-[#ff6b3d]" />,
+    label: "Completed Projects",
+    value: "388615",
+  },
+];
 
 const Home = () => {
   return (
     <section className="-mt-10">
       <div className="hero bg-base-200 min-h-[calc(100vh-5px)]">
         <div className="hero-content flex-col lg:flex-row lg:gap-12">
-          {/* Left image: small up/down motion */}
+          {/* Left image: up/down motion */}
           <motion.div
-            className="w-64 mb-25 h-64 lg:w-72 lg:h-72 rounded-2xl shadow-2xl overflow-hidden"
+            className="w-64 h-64 lg:w-72 lg:h-72 rounded-2xl shadow-2xl overflow-hidden"
             animate={{ y: [-20, 80, -20] }}
             transition={{
               duration: 6,
@@ -26,7 +50,7 @@ const Home = () => {
             />
           </motion.div>
 
-          {/* Right image: small left/right motion */}
+          {/* Right image: left/right motion */}
           <motion.div
             className="w-64 h-64 lg:w-72 lg:h-72 rounded-2xl shadow-2xl overflow-hidden"
             animate={{ x: [20, -80, 20] }}
@@ -43,7 +67,7 @@ const Home = () => {
             />
           </motion.div>
 
-          {/* Text content */}
+          {/* Text + stats */}
           <div className="max-w-xl">
             <h1 className="text-4xl lg:text-5xl font-bold">
               Find your next opportunity
@@ -53,7 +77,27 @@ const Home = () => {
               application in one place. Build your career with a modern,
               professional job portal.
             </p>
-            <button className="btn btn-primary">Get Started</button>
+            <button className="btn btn-primary mb-6">Get Started</button>
+
+            {/* stats cards */}
+            <div className="grid gap-4 sm:grid-cols-3">
+              {stats.map((item) => (
+                <div
+                  key={item.id}
+                  className="relative rounded-2xl bg-white shadow-sm border border-orange-50 px-3 py-4 text-center"
+                >
+                  <div className="flex items-center justify-center mb-2">
+                    {item.icon}
+                  </div>
+                  <p className="text-lg font-semibold text-slate-900">
+                    {item.value}
+                  </p>
+                  <p className="text-xs font-medium text-slate-500">
+                    {item.label}
+                  </p>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
