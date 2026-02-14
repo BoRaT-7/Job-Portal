@@ -6,6 +6,8 @@ import { AuthContext } from "../Provider/AuthProvider";
 const Navber = () => {
   const { user, logoutUser } = useContext(AuthContext);
   const navigate = useNavigate();
+   const firstName =
+  user?.displayName?.split(" ")[0] || user?.email?.split("@")[0];
 
   const handleLogout = async () => {
     try {
@@ -98,7 +100,7 @@ const Navber = () => {
                 {user.email?.[0]?.toUpperCase() || "U"}
               </span>
               <span className="text-sm max-w-[140px] truncate">
-                {user.email}
+                {firstName}
               </span>
             </div>
             <button
