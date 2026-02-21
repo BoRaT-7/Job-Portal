@@ -27,59 +27,58 @@ const Login = () => {
 
     try {
       setSubmitting(true);
-      const result = await loginUser(formData.email, formData.password);
-      console.log("Login success:", result.user);
-      navigate(from, { replace: true }); // সফল হলে আগের বা home এ নেভিগেট
+      await loginUser(formData.email, formData.password);
+      navigate(from, { replace: true });
     } catch (error) {
-      console.error("Login error:", error);
-      if (error.code === "auth/user-not-found") {
-        setErrorMsg("No user found with this email.");
-      } else if (error.code === "auth/wrong-password") {
-        setErrorMsg("Incorrect password. Please try again.");
-      } else if (error.code === "auth/too-many-requests") {
-        setErrorMsg("Too many attempts. Try again later.");
-      } else {
-        setErrorMsg(error.message || "Login failed. Please try again.");
-      }
+      setErrorMsg(error.message || "Login failed.");
     } finally {
       setSubmitting(false);
     }
   };
 
   const handleForgotPassword = async () => {
-    setErrorMsg("");
-    setInfoMsg("");
     if (!formData.email) {
       setErrorMsg("Please enter your email first.");
       return;
     }
     try {
       await resetPassword(formData.email);
-      setInfoMsg("Password reset email sent. Check your inbox.");
+      setInfoMsg("Password reset email sent 🐾");
     } catch (error) {
-      console.error("Reset password error:", error);
-      setErrorMsg(error.message || "Failed to send reset email.");
+      setErrorMsg(error.message);
     }
   };
 
   return (
-    <section className="min-h-screen bg-base-300 flex items-center justify-center">
+    <section className="min-h-screen bg-gradient-to-r from-pink-100 via-purple-100 to-blue-100 flex items-center justify-center relative overflow-hidden">
+
+      {/* Floating Paw Animation */}
+      <div className="absolute top-10 left-10 text-4xl animate-bounce opacity-30">
+        🐾
+      </div>
+      <div className="absolute bottom-20 right-10 text-5xl animate-pulse opacity-30">
+        🐈
+      </div>
+
       <div className="hero max-w-5xl w-full px-4">
         <div className="hero-content flex-col lg:flex-row gap-10">
-          <div className="text-center lg:text-left space-y-4 animate-fade-in">
-            <h1 className="text-4xl md:text-5xl font-bold">
-              Welcome back
+
+          {/* Left Side */}
+          <div className="text-center lg:text-left space-y-4">
+            <h1 className="text-4xl md:text-5xl font-extrabold text-primary flex items-center gap-2 justify-center lg:justify-start">
+              🐈 Welcome Back
             </h1>
             <p className="py-2 text-base-content/70 max-w-md">
-              Log in to manage your applications, track interviews, and
-              access personalized job recommendations.
+              Log in to manage your pets, book services, and explore adoption
+              options with PetCare 🐾
             </p>
           </div>
 
-          <div className="card bg-base-100 w-full max-w-md shadow-2xl animate-slide-up">
+          {/* Card */}
+          <div className="card bg-base-100 w-full max-w-md shadow-2xl hover:shadow-pink-200 transition-all duration-300">
             <div className="card-body">
-              <h2 className="text-2xl font-semibold mb-4 text-center">
-                Login
+              <h2 className="text-2xl font-semibold mb-4 text-center text-secondary">
+                PetCare Login 🐾
               </h2>
 
               {errorMsg && (
@@ -100,8 +99,8 @@ const Login = () => {
                   <input
                     type="email"
                     name="email"
-                    className="input input-bordered w-full"
-                    placeholder="you@example.com"
+                    className="input input-bordered w-full focus:ring-2 focus:ring-primary"
+                    placeholder="petlover@email.com"
                     value={formData.email}
                     onChange={handleChange}
                     required
@@ -135,13 +134,13 @@ const Login = () => {
                   <button
                     type="button"
                     onClick={handleForgotPassword}
-                    className="link link-hover"
+                    className="link link-hover text-primary"
                   >
                     Forgot password?
                   </button>
                   <span>
                     New here?{" "}
-                    <Link to="/register" className="link link-primary">
+                    <Link to="/register" className="link link-secondary">
                       Create account
                     </Link>
                   </span>
@@ -150,13 +149,14 @@ const Login = () => {
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="btn btn-neutral w-full mt-4 hover:scale-[1.02] transition-transform disabled:opacity-60"
+                  className="btn btn-primary w-full mt-4 hover:scale-[1.03] transition-transform duration-200"
                 >
-                  {submitting ? "Logging in..." : "Log In"}
+                  {submitting ? "Logging in..." : "Login 🐾"}
                 </button>
               </form>
             </div>
           </div>
+
         </div>
       </div>
     </section>

@@ -6,6 +6,9 @@ import Register from "../pages/Home/register/Register";
 import Login from "../pages/Home/login/Login";
 import Jobs from "../pages/Jobs/Jobs";
 import About from "../pages/About/About";
+import Services from "../pages/Services/Services";
+import Adoption from "../pages/Adoption/Adoption";
+import Petfood from "../pages/Petfood/Petfood";
 
 const router = createBrowserRouter([
   {
@@ -15,6 +18,18 @@ const router = createBrowserRouter([
       {
         index:true,
         element: <Home />,
+      },
+      {
+        path:"services",
+        element:<Services></Services>
+      },
+      {
+        path:"adoption",
+        element:<Adoption></Adoption>
+      },
+      {
+        path:"petfood",
+        element:<Petfood></Petfood>
       },
       {
         path:"jobs",
