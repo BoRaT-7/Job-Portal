@@ -9,6 +9,8 @@ import About from "../pages/About/About";
 import Services from "../pages/Services/Services";
 import Adoption from "../pages/Adoption/Adoption";
 import Petfood from "../pages/Petfood/Petfood";
+import AdoptForm from "../pages/Adoption/AdoptForm";
+import PaymentForm from "../pages/Petfood/PaymentForm";
 
 const router = createBrowserRouter([
   {
@@ -23,13 +25,18 @@ const router = createBrowserRouter([
         path:"services",
         element:<Services></Services>
       },
-      {
-        path:"adoption",
-        element:<Adoption></Adoption>
+      
+    {
+       path:"adopt-form",
+       element:<AdoptForm></AdoptForm>
       },
       {
         path:"petfood",
         element:<Petfood></Petfood>
+      },
+      {
+        path:"payment",
+        element:<PaymentForm></PaymentForm>
       },
       {
         path:"jobs",
