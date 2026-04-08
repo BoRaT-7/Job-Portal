@@ -11,7 +11,7 @@ const Mainlayout = () => {
       <Navber />
 
       {/* Page Content */}
-      <div className="flex-grow max-w-7xl mx-auto w-full">
+      <div className="flex-grow max-w-full mx-auto w-full">
         <Outlet />
       </div>
 

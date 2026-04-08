@@ -1,12 +1,12 @@
 import React, { useState, useContext } from "react";
 import { AuthContext } from "../../../Provider/AuthProvider";
 import { Link } from "react-router-dom";
-
+import { useNavigate } from "react-router-dom";
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const Register = () => {
   const { createUser } = useContext(AuthContext);
-
+ const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -45,6 +45,7 @@ const Register = () => {
       setSubmitting(true);
       const result = await createUser(formData.email, formData.password);
       console.log("Register success user:", result.user);
+      navigate("/");
     } catch (error) {
       setErrors((p) => ({
         ...p,

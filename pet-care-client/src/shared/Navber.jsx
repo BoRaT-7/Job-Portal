@@ -44,14 +44,14 @@ const Navbar = () => {
       </li>
 
       <li>
-        <NavLink
-          to="/adoption"
-          className={({ isActive }) =>
-            isActive ? "text-primary font-semibold" : "font-medium"
-          }
-        >
-          Adoption
-        </NavLink>
+     <NavLink
+  to="/adoption"
+  className={({ isActive }) =>
+    isActive ? "text-primary font-semibold" : "font-medium"
+  }
+>
+  Adoption
+</NavLink>
       </li>
        <li>
         <NavLink

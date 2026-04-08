@@ -3,20 +3,8 @@ import { FaStar } from "react-icons/fa";
 
 export default function ReviewSection() {
   const [reviews, setReviews] = useState([
-    {
-      id: 1,
-      name: "Sarah Ahmed",
-      rating: 5,
-      review:
-        "PetCare provided amazing grooming service for my dog. Highly recommended!",
-    },
-    {
-      id: 2,
-      name: "John Smith",
-      rating: 4,
-      review:
-        "Excellent service and very caring staff. My cat loved the environment!",
-    },
+  
+   
   ]);
 
   const [formData, setFormData] = useState({
@@ -46,8 +34,8 @@ export default function ReviewSection() {
     <section className="bg-gradient-to-b from-gray-50 to-white py-20 px-6 md:px-20">
 
       {/* ================= SECTION TITLE ================= */}
-      <div className="text-center mb-14">
-        <h2 className="text-4xl font-bold text-primary mb-3">
+      <div className="text-center mb-10">
+        <h2 className="text-4xl font-bold text-gray-800 mb-3">
           🐾 Customer Reviews
         </h2>
         <p className="text-gray-500 max-w-xl mx-auto">
