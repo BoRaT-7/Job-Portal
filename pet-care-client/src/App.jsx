@@ -1,16 +1,12 @@
-
-
-import './App.css'
+import { Toaster } from "react-hot-toast";
 
 function App() {
- 
-
   return (
-    <>
-      
-    <h2>hello bangladesh</h2>
-    </>
-  )
+    <div>
+      <Toaster /> {/* 🔥 এটা must */}
+      <YourRoutesOrComponents />
+    </div>
+  );
 }
 
-export default App
+export default App;

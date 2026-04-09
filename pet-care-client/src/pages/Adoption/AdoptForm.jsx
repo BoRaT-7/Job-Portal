@@ -18,17 +18,45 @@ export default function AdoptForm() {
     });
   };
 
-  const handleSubmit = (e) => {
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+
+  //   toast.success("Adoption Request Submitted Successfully! 🎉");
+
+  //   setFormData({
+  //     name: "",
+  //     email: "",
+  //     phone: "",
+  //     address: "",
+  //   });
+  // };
+
+  const handleSubmit = async (e) =>{
     e.preventDefault();
 
-    toast.success("Adoption Request Submitted Successfully! 🎉");
-
-    setFormData({
-      name: "",
-      email: "",
-      phone: "",
-      address: "",
-    });
+    try {
+      const res = await fetch("http://localhost:5000/adoptions",
+        {
+          method:"POST",
+          headers:{
+            "Content-Type": "application/json",
+          },
+          body:JSON.stringify(formData),
+        });
+        const data = await res.json();
+        if(data.insertedId){
+          toast.success("Adoption Request Submitted Successfully! 🎉");
+          setFormData({
+            name:"",
+            email:"",
+            phone:"",
+            address:"",
+          });
+        }
+    } catch (error){
+      console.error(error);
+      toast.error("Error submitting form ❌");
+    }
   };
 
   return (

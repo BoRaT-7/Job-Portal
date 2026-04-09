@@ -21,7 +21,7 @@ const FoodSection = () => {
   return (
     <section className="py-6 bg-white">
       <div className="container mx-auto px-6">
-        <h2 className="text-4xl font-bold text-gray-800 mb-3">
+        <h2 className="text-4xl text-center font-bold text-gray-800 mb-3">
           🍖 Healthy Pet Food
         </h2>
         <p className="text-center text-gray-600 max-w-2xl mx-auto mb-6">

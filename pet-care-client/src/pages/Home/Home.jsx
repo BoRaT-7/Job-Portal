@@ -86,7 +86,7 @@ const Home = () => {
       {/* ================= ADOPTION SECTION ================= */}
   <section className="py-16 bg-white">
   <div className="container mx-auto px-6">
-    <h2 className="text-4xl font-bold text-gray-800 mb-3">
+    <h2 className="text-4xl text-center font-bold text-gray-800 mb-3">
       🐾 Available for Adoption
     </h2>
 
