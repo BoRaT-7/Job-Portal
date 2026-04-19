@@ -35,24 +35,58 @@ const PaymentForm = () => {
       setQuantity((prev) => prev + 1);
     }
   };
+const paymentOptions = [
+  {
+    name: "Bkash",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/BKash_logo.svg/2560px-BKash_logo.svg.png",
+  },
+  {
+    name: "Nogod",
+    logo: "https://download.logo.wine/logo/Nagad/Nagad-Logo.wine.png",
+  },
+  {
+    name: "Rocket",
+    logo: "https://seeklogo.com/images/D/dutch-bangla-rocket-logo-BB6B2C6F9D-seeklogo.com.png",
+  },
+];
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    toast.success(
-      `Payment for ${food?.name} (Qty: ${quantity}) submitted successfully! 🎉`
-    );
-
-    setFormData({
-      name: "",
-      phone: "",
-      address: "",
-      paymentMethod: "Bkash",
-      transactionId: "",
-    });
-    setQuantity(1);
-    navigate("/");
+  const paymentData = {
+    name: formData.name,
+    phone: formData.phone,
+    address: formData.address,
+    paymentMethod: formData.paymentMethod,
+    transactionId: formData.transactionId,
+    productName: food.name,
+    productCategory: food.category,
+    productImage: food.image,
+    unitPrice: food.price,
+    quantity: quantity,
   };
+
+  try {
+    const response = await fetch("http://localhost:5000/api/payments", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(paymentData),
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      toast.success("Payment submitted successfully! 🎉");
+      navigate("/");
+    } else {
+      toast.error(data.error || "Payment failed!");
+    }
+  } catch (error) {
+    console.error(error);
+    toast.error("Server error!");
+  }
+};
 
   if (!food) {
     return (
@@ -152,16 +186,45 @@ const PaymentForm = () => {
               className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-pink-400 outline-none"
             ></textarea>
 
-            <select
-              name="paymentMethod"
-              value={formData.paymentMethod}
-              onChange={handleChange}
-              className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-pink-400 outline-none"
-            >
-              <option value="Bkash">Bkash</option>
-              <option value="Nogod">Nogod</option>
-              <option value="Rocket">Rocket</option>
-            </select>
+          <div className="space-y-3">
+  {paymentOptions.map((item) => (
+    <label
+      key={item.name}
+      className={`flex items-center justify-between p-3 border rounded-xl cursor-pointer transition ${
+        formData.paymentMethod === item.name
+          ? "border-pink-500 bg-pink-50"
+          : "border-gray-300"
+      }`}
+    >
+      <div className="flex items-center gap-3">
+        <img src={item.logo} alt={item.name} className="w-10 h-10 object-contain" />
+        <span className="font-medium">{item.name}</span>
+      </div>
+
+      {/* Dot (radio style) */}
+      <div
+        className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
+          formData.paymentMethod === item.name
+            ? "border-pink-500"
+            : "border-gray-400"
+        }`}
+      >
+        {formData.paymentMethod === item.name && (
+          <div className="w-2.5 h-2.5 bg-pink-500 rounded-full"></div>
+        )}
+      </div>
+
+      <input
+        type="radio"
+        name="paymentMethod"
+        value={item.name}
+        checked={formData.paymentMethod === item.name}
+        onChange={handleChange}
+        className="hidden"
+      />
+    </label>
+  ))}
+</div>
 
             <input
               type="text"
