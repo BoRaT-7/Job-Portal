@@ -21,6 +21,21 @@ const PaymentForm = () => {
 
   const [quantity, setQuantity] = useState(1);
 
+  const paymentOptions = [
+    {
+      name: "Bkash",
+      logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/BKash_logo.svg/2560px-BKash_logo.svg.png",
+    },
+    {
+      name: "Nogod",
+      logo: "https://download.logo.wine/logo/Nagad/Nagad-Logo.wine.png",
+    },
+    {
+      name: "Rocket",
+      logo: "https://seeklogo.com/images/D/dutch-bangla-rocket-logo-BB6B2C6F9D-seeklogo.com.png",
+    },
+  ];
+
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -35,58 +50,40 @@ const PaymentForm = () => {
       setQuantity((prev) => prev + 1);
     }
   };
-const paymentOptions = [
-  {
-    name: "Bkash",
-    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/BKash_logo.svg/2560px-BKash_logo.svg.png",
-  },
-  {
-    name: "Nogod",
-    logo: "https://download.logo.wine/logo/Nagad/Nagad-Logo.wine.png",
-  },
-  {
-    name: "Rocket",
-    logo: "https://seeklogo.com/images/D/dutch-bangla-rocket-logo-BB6B2C6F9D-seeklogo.com.png",
-  },
-];
-const handleSubmit = async (e) => {
-  e.preventDefault();
 
-  const paymentData = {
-    name: formData.name,
-    phone: formData.phone,
-    address: formData.address,
-    paymentMethod: formData.paymentMethod,
-    transactionId: formData.transactionId,
-    productName: food.name,
-    productCategory: food.category,
-    productImage: food.image,
-    unitPrice: food.price,
-    quantity: quantity,
-  };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  try {
-    const response = await fetch("http://localhost:5000/api/payments", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(paymentData),
-    });
+    const paymentData = {
+      ...formData,
+      productName: food.name,
+      productCategory: food.category,
+      productImage: food.image,
+      unitPrice: food.price,
+      quantity: quantity,
+    };
 
-    const data = await response.json();
+    try {
+      const response = await fetch("http://localhost:5000/api/payments", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(paymentData),
+      });
 
-    if (response.ok) {
-      toast.success("Payment submitted successfully! 🎉");
-      navigate("/");
-    } else {
-      toast.error(data.error || "Payment failed!");
+      const data = await response.json();
+
+      if (response.ok) {
+        toast.success("Payment submitted successfully! 🎉");
+        navigate("/");
+      } else {
+        toast.error(data.error || "Payment failed!");
+      }
+    } catch (error) {
+      toast.error("Server error!");
     }
-  } catch (error) {
-    console.error(error);
-    toast.error("Server error!");
-  }
-};
+  };
 
   if (!food) {
     return (
@@ -100,120 +97,110 @@ const handleSubmit = async (e) => {
 
   return (
     <div className="min-h-screen flex items-center justify-center relative p-4 bg-gray-50">
-      {/* Background Images */}
+      {/* Background */}
       <img
         src={bg1}
-        alt="Background 1"
-        className="absolute inset-0 w-full h-full object-cover opacity-20 pointer-events-none"
+        className="absolute inset-0 w-full h-full object-cover opacity-20"
       />
       <img
         src={bg2}
-        alt="Background 2"
-        className="absolute inset-0 w-full h-full object-cover opacity-20 pointer-events-none"
+        className="absolute inset-0 w-full h-full object-cover opacity-20"
       />
 
       <div className="relative bg-white rounded-3xl shadow-2xl max-w-5xl w-full grid md:grid-cols-2 overflow-hidden">
-        {/* Left Side - Product Info */}
-        <div className="bg-pink-50 p-8 flex flex-col items-center justify-center gap-4">
-          <h2 className="text-3xl font-bold text-pink-600 text-center">
-            🐾 Checkout
-          </h2>
+        {/* LEFT */}
+        <div className="bg-pink-50 p-8 flex flex-col items-center gap-4">
+          <h2 className="text-3xl font-bold text-pink-600">🐾 Checkout</h2>
+
           <img
             src={food.image}
-            alt={food.name}
-            className="w-48 h-48 object-cover rounded-2xl shadow-lg"
+            className="w-44 h-44 object-cover rounded-2xl shadow"
           />
-          <h3 className="text-xl font-semibold text-gray-800">{food.name}</h3>
-          <p className="text-gray-600">Category: {food.category}</p>
-          <p className="text-lg text-gray-700">Unit Price: ${food.price}</p>
 
-          {/* Quantity Selector */}
-          <div className="flex items-center gap-4 mt-2">
+          <h3 className="text-xl font-semibold">{food.name}</h3>
+          <p className="text-gray-600">{food.category}</p>
+          <p className="text-lg font-medium">${food.price}</p>
+
+          {/* Quantity */}
+          <div className="flex items-center gap-4">
             <button
               onClick={() => handleQuantity("decrease")}
-              className="px-3 py-1 bg-pink-500 text-white rounded-xl hover:bg-pink-600 transition"
+              className="px-3 py-1 bg-pink-500 text-white rounded-lg"
             >
               -
             </button>
-            <span className="text-lg font-bold">{quantity}</span>
+            <span className="font-bold">{quantity}</span>
             <button
               onClick={() => handleQuantity("increase")}
-              className="px-3 py-1 bg-pink-500 text-white rounded-xl hover:bg-pink-600 transition"
+              className="px-3 py-1 bg-pink-500 text-white rounded-lg"
             >
               +
             </button>
           </div>
 
-          <p className="mt-3 text-2xl font-bold text-pink-500">
+          <p className="text-2xl font-bold text-pink-500">
             Total: ${totalCost}
           </p>
         </div>
 
-        {/* Right Side - Payment Form */}
+        {/* RIGHT */}
         <div className="p-8">
-          <h2 className="text-2xl font-bold text-gray-800 text-center mb-6">
-            Enter Payment Details
+          <h2 className="text-2xl font-bold text-center mb-6">
+            Payment Details
           </h2>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <input
-              type="text"
               name="name"
               placeholder="Your Name"
+              required
               value={formData.name}
               onChange={handleChange}
-              required
-              className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-pink-400 outline-none"
+              className="w-full p-3 border rounded-xl"
             />
 
             <input
-              type="text"
+              type="tel"
               name="phone"
-              placeholder="Phone Number"
+              placeholder="Enter your number"
+              pattern="01[0-9]{9}"
+              required
               value={formData.phone}
               onChange={handleChange}
-              required
-              className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-pink-400 outline-none"
+              className="w-full p-3 border rounded-xl"
             />
 
             <textarea
               name="address"
               placeholder="Your Address"
+              required
               value={formData.address}
               onChange={handleChange}
-              required
-              rows="3"
-              className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-pink-400 outline-none"
-            ></textarea>
+              className="w-full p-3 border rounded-xl"
+            />
 
-          <div className="space-y-3">
+            {/* PAYMENT METHOD */}
+   <div className="flex gap-4 flex-wrap">
   {paymentOptions.map((item) => (
     <label
       key={item.name}
-      className={`flex items-center justify-between p-3 border rounded-xl cursor-pointer transition ${
+      className={`flex items-center gap-2 cursor-pointer px-3 py-2 rounded-lg border transition ${
         formData.paymentMethod === item.name
           ? "border-pink-500 bg-pink-50"
           : "border-gray-300"
       }`}
     >
-      <div className="flex items-center gap-3">
-        <img src={item.logo} alt={item.name} className="w-10 h-10 object-contain" />
-        <span className="font-medium">{item.name}</span>
-      </div>
-
-      {/* Dot (radio style) */}
-      <div
-        className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-          formData.paymentMethod === item.name
-            ? "border-pink-500"
-            : "border-gray-400"
-        }`}
-      >
+      {/* Dot */}
+      <div className="w-4 h-4 border-2 rounded-full flex items-center justify-center">
         {formData.paymentMethod === item.name && (
-          <div className="w-2.5 h-2.5 bg-pink-500 rounded-full"></div>
+          <div className="w-2 h-2 bg-pink-500 rounded-full"></div>
         )}
       </div>
 
+      {/* Name */}
+      <span className="text-sm font-medium">{item.name}</span>
+
+      {/* Hidden input */}
       <input
         type="radio"
         name="paymentMethod"
@@ -226,21 +213,40 @@ const handleSubmit = async (e) => {
   ))}
 </div>
 
+{/* 🔥 Payment Number Show */}
+<div className="mt-4 p-3 rounded-xl bg-yellow-50 border border-yellow-200 text-sm">
+  {formData.paymentMethod === "Bkash" && (
+    <p>
+      Send Money to <span className="font-bold text-pink-600">01754862489 (Bkash)</span>
+    </p>
+  )}
+
+  {formData.paymentMethod === "Nogod" && (
+    <p>
+      Send Money to <span className="font-bold text-orange-500">01962584371 (Nogod)</span>
+    </p>
+  )}
+
+  {formData.paymentMethod === "Rocket" && (
+    <p>
+      Send Money to <span className="font-bold text-purple-500">01854211690 (Rocket)</span>
+    </p>
+  )}
+</div>
+
+            {/* INSTRUCTION */}
+          
             <input
-              type="text"
               name="transactionId"
               placeholder="Transaction ID"
+              required
               value={formData.transactionId}
               onChange={handleChange}
-              required
-              className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-pink-400 outline-none"
+              className="w-full p-3 border rounded-xl"
             />
 
-            <button
-              type="submit"
-              className="w-full bg-pink-500 text-white py-3 rounded-xl hover:bg-pink-600 transition duration-300 shadow-lg mt-2"
-            >
-              Pay Now 💳
+            <button className="w-full bg-pink-500 text-white py-3 rounded-xl">
+              Confirm Payment 💳
             </button>
           </form>
         </div>

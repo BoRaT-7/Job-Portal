@@ -2,6 +2,7 @@ import React, { useState, useContext } from "react";
 import { AuthContext } from "../../../Provider/AuthProvider";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { updateProfile } from "firebase/auth";
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const Register = () => {
@@ -32,29 +33,33 @@ const Register = () => {
     }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setErrors((p) => ({ ...p, firebase: "" }));
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    if (!emailRegex.test(formData.email)) {
-      setErrors((p) => ({ ...p, email: "Invalid email address" }));
-      return;
-    }
+  try {
+    setSubmitting(true);
 
-    try {
-      setSubmitting(true);
-      const result = await createUser(formData.email, formData.password);
-      console.log("Register success user:", result.user);
-      navigate("/");
-    } catch (error) {
-      setErrors((p) => ({
-        ...p,
-        firebase: error.message || "Registration failed",
-      }));
-    } finally {
-      setSubmitting(false);
-    }
-  };
+    const result = await createUser(formData.email, formData.password);
+
+    // ✅ set display name
+    await updateProfile(result.user, {
+      displayName: formData.name,
+    });
+
+    // 🔥 IMPORTANT: reload user
+    await result.user.reload();
+
+    navigate("/");
+  } catch (error) {
+    setErrors((p) => ({
+      ...p,
+      firebase: error.message,
+    }));
+  } finally {
+    setSubmitting(false);
+  }
+};
+
 
   return (
     <section className="min-h-screen flex items-center justify-center bg-gradient-to-r from-pink-100 via-purple-100 to-blue-100 px-4">

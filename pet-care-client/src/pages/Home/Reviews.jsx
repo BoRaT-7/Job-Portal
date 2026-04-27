@@ -1,127 +1,200 @@
-import React, { useState } from "react";
-import { FaStar } from "react-icons/fa";
+import React, { useContext, useEffect, useState } from "react";
+import { FaStar, FaEdit, FaTrash } from "react-icons/fa";
+import { AuthContext } from "../../Provider/AuthProvider";
+import api from "../../api/reviewApi";
 
 export default function ReviewSection() {
-  const [reviews, setReviews] = useState([
-  
-   
-  ]);
+  const { user } = useContext(AuthContext);
+
+  const [reviews, setReviews] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [editId, setEditId] = useState(null);
 
   const [formData, setFormData] = useState({
-    name: "",
     review: "",
     rating: 5,
   });
 
-  const handleSubmit = (e) => {
+  // hover state (NEW for better UX)
+  const [hoverRating, setHoverRating] = useState(0);
+
+  const loadReviews = async () => {
+    try {
+      setLoading(true);
+      const res = await api.get("/reviews");
+      setReviews(res.data);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadReviews();
+  }, []);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const newReview = {
-      id: Date.now(),
-      ...formData,
-    };
+    if (!user) return alert("Please login first");
 
-    setReviews([newReview, ...reviews]);
+    if (editId) {
+      await api.put(`/reviews/${editId}`, formData);
+      setEditId(null);
+    } else {
+      await api.post("/reviews", {
+        name: user?.displayName || user?.email?.split("@")[0],
+        email: user.email,
+        photo: user.photoURL || "",
+        ...formData,
+        createdAt: new Date(),
+      });
+    }
 
+    setFormData({ review: "", rating: 5 });
+    setHoverRating(0);
+    loadReviews();
+  };
+
+  const handleEdit = (item) => {
+    setEditId(item._id);
     setFormData({
-      name: "",
-      review: "",
-      rating: 5,
+      review: item.review,
+      rating: item.rating,
     });
   };
 
-  return (
-    <section className="bg-gradient-to-b from-gray-50 to-white py-20 px-6 md:px-20">
+  const handleDelete = async (item) => {
+    if (user?.email !== item.email) {
+      return alert("You can only delete your own review");
+    }
 
-      {/* ================= SECTION TITLE ================= */}
-      <div className="text-center mb-10">
-        <h2 className="text-4xl font-bold text-gray-800 mb-3">
-          🐾 Customer Reviews
+    await api.delete(`/reviews/${item._id}`);
+    loadReviews();
+  };
+
+  return (
+    <section className="py-10 px-4 md:px-16 bg-gradient-to-br from-cyan-50 to-blue-50">
+
+      {/* TITLE */}
+      <div className="text-center mb-6">
+        <h2 className="text-2xl md:text-3xl font-bold text-gray-800">
+          Customer Reviews
         </h2>
-        <p className="text-gray-500 max-w-xl mx-auto">
-          See what pet parents are saying about our services.
+        <p className="text-gray-500 text-sm">
+          What our users say about PetCare 🐾
         </p>
       </div>
 
-      {/* ================= REVIEW CARDS (TOP) ================= */}
-      <div className="grid md:grid-cols-3 gap-8 mb-20">
+      {/* LOADING */}
+      {loading && (
+        <p className="text-center text-gray-500">Loading reviews...</p>
+      )}
+
+      {/* EMPTY */}
+      {!loading && reviews.length === 0 && (
+        <p className="text-center text-gray-400">
+          No reviews yet. Be the first! 🐾
+        </p>
+      )}
+
+      {/* CARDS */}
+      <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4 mb-8">
         {reviews.map((item) => (
           <div
-            key={item.id}
-            className="bg-white p-6 rounded-3xl shadow-md hover:shadow-2xl transition duration-300 hover:-translate-y-2 border"
+            key={item._id}
+            className="bg-white/70 backdrop-blur border border-white/40 p-4 rounded-2xl shadow hover:shadow-lg transition"
           >
-            <div className="flex justify-between items-center mb-3">
-              <h3 className="font-semibold text-lg text-gray-800">
-                {item.name}
-              </h3>
-
-              <div className="flex text-yellow-400">
-                {[...Array(item.rating)].map((_, index) => (
-                  <FaStar key={index} />
-                ))}
-              </div>
+            {/* USER */}
+            <div className="flex items-center gap-2 mb-2">
+              <img
+                src={item.photo || "https://i.ibb.co/4pDNDk1/avatar.png"}
+                className="w-8 h-8 rounded-full"
+              />
+              <h4 className="text-sm font-semibold text-gray-800">
+                {item.name || item.email?.split("@")[0] || "Anonymous"}
+              </h4>
             </div>
 
-            <p className="text-gray-600 text-sm leading-relaxed">
+            {/* STARS (DISPLAY ONLY) */}
+            <div className="flex text-yellow-400 mb-2 text-sm">
+              {[...Array(item.rating)].map((_, i) => (
+                <FaStar key={i} />
+              ))}
+            </div>
+
+            {/* REVIEW */}
+            <p className="text-gray-600 text-sm mb-3 line-clamp-2">
               {item.review}
             </p>
+
+            {/* ACTIONS */}
+            {user?.email === item.email && (
+              <div className="flex gap-4 text-sm">
+                <button
+                  onClick={() => handleEdit(item)}
+                  className="text-blue-500 hover:scale-110 transition"
+                >
+                  <FaEdit />
+                </button>
+
+                <button
+                  onClick={() => handleDelete(item)}
+                  className="text-red-500 hover:scale-110 transition"
+                >
+                  <FaTrash />
+                </button>
+              </div>
+            )}
           </div>
         ))}
       </div>
 
-      {/* ================= INPUT FORM (BOTTOM) ================= */}
-      <div className="max-w-3xl mx-auto bg-white p-8 rounded-3xl shadow-xl border">
-        <h3 className="text-2xl font-semibold mb-6 text-center text-primary">
-          ✍️ Leave Your Review
+      {/* FORM */}
+      <div className="max-w-md mx-auto bg-white/80 backdrop-blur p-5 rounded-2xl shadow-lg">
+        <h3 className="text-center font-semibold text-lg mb-4 text-cyan-600">
+          {editId ? "Update Review" : "Leave a Review"}
         </h3>
 
-        <form onSubmit={handleSubmit} className="space-y-5">
+        <form onSubmit={handleSubmit} className="space-y-3">
 
-          {/* Name */}
-          <input
-            type="text"
-            placeholder="Enter your name"
-            className="w-full border border-gray-300 focus:border-primary focus:ring-1 focus:ring-primary outline-none p-3 rounded-xl transition"
-            value={formData.name}
-            required
-            onChange={(e) =>
-              setFormData({ ...formData, name: e.target.value })
-            }
-          />
-
-          {/* Review */}
+          {/* TEXT */}
           <textarea
-            placeholder="Write your experience..."
-            className="w-full border border-gray-300 focus:border-primary focus:ring-1 focus:ring-primary outline-none p-3 rounded-xl transition"
-            rows="4"
-            required
+            placeholder="Share your experience..."
+            className="w-full p-2 text-sm border rounded-lg outline-none focus:ring-2 focus:ring-cyan-400"
             value={formData.review}
             onChange={(e) =>
               setFormData({ ...formData, review: e.target.value })
             }
-          ></textarea>
+            required
+          />
 
-          {/* Rating */}
-          <select
-            className="w-full border border-gray-300 focus:border-primary focus:ring-1 focus:ring-primary outline-none p-3 rounded-xl transition"
-            value={formData.rating}
-            onChange={(e) =>
-              setFormData({ ...formData, rating: Number(e.target.value) })
-            }
-          >
-            <option value={5}>⭐⭐⭐⭐⭐ (5 Star)</option>
-            <option value={4}>⭐⭐⭐⭐ (4 Star)</option>
-            <option value={3}>⭐⭐⭐ (3 Star)</option>
-            <option value={2}>⭐⭐ (2 Star)</option>
-            <option value={1}>⭐ (1 Star)</option>
-          </select>
+          {/* ⭐ IMPROVED STAR RATING (HOVER + CLICK + SMOOTH UI) */}
+          <div className="flex justify-center gap-2 py-2">
+            {[1, 2, 3, 4, 5].map((star) => {
+              const active = star <= (hoverRating || formData.rating);
 
-          {/* Button */}
-          <button
-            type="submit"
-            className="w-full bg-primary text-white py-3 rounded-xl font-semibold hover:scale-105 hover:shadow-lg transition duration-300"
-          >
-            Submit Review
+              return (
+                <FaStar
+                  key={star}
+                  size={26}
+                  onClick={() =>
+                    setFormData({ ...formData, rating: star })
+                  }
+                  onMouseEnter={() => setHoverRating(star)}
+                  onMouseLeave={() => setHoverRating(0)}
+                  className={`
+                    cursor-pointer transition-all duration-200
+                    hover:scale-125
+                    ${active ? "text-yellow-400" : "text-gray-300"}
+                  `}
+                />
+              );
+            })}
+          </div>
+
+          {/* BUTTON */}
+          <button className="w-full bg-cyan-500 text-white py-2 rounded-lg hover:bg-cyan-600 transition">
+            {editId ? "Update Review" : "Submit Review"}
           </button>
         </form>
       </div>

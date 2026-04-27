@@ -1,9 +1,8 @@
-// models/paymentModel.js
 const connectDB = require("../config/db");
 
-async function getPaymentCollection() {
+const getPaymentCollection = async () => {
   const db = await connectDB();
-  return db.collection("Payments");
-  
-}
+  return db.collection("payments"); // 🔥 collection name
+};
+
 module.exports = getPaymentCollection;

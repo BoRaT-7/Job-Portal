@@ -1,12 +1,10 @@
 require("dotenv").config();
-
 const express = require("express");
 const cors = require("cors");
 
-const connectDB = require("./config/db"); // ✅ IMPORT
+const connectDB = require("./config/db");
 
-const adoptionRoutes = require("./routes/adoptionRoutes");
-const paymentRoutes = require("./routes/paymentRoutes");
+const reviewRoutes = require("./routes/reviewRoutes");
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -16,24 +14,23 @@ app.use(cors());
 app.use(express.json());
 
 // routes
-app.use("/adoptions", adoptionRoutes);
-app.use("/api/payments",paymentRoutes);
+app.use("/reviews", reviewRoutes);
 
-// test route
 app.get("/", (req, res) => {
   res.send("🚀 Pet Care Server Running");
 });
 
-// ✅ DATABASE CONNECT CALL
-connectDB()
-  .then(() => {
-    console.log("🔥 Database Ready");
-  })
-  .catch((err) => {
-    console.error("❌ DB Error:", err);
-  });
+const startServer = async () => {
+  try {
+    await connectDB();
+    console.log("🔥 DB Connected");
 
-// server start
-app.listen(port, () => {
-  console.log(`🚀 Server running at port: ${port}`);
-});
+    app.listen(port, () => {
+      console.log("🚀 Server running on", port);
+    });
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+startServer();
