@@ -19,18 +19,17 @@ const Services = () => {
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {services.map((service) => (
-            <ServiceCard
-              key={service.name}
-              service={service}
-              onClick={() => {
-                // Redirect to dynamic detail page
-                if (service.name === "Pet Adoption") {
-                  navigate("/adopt-form"); // direct to adoption form
-                } else {
-                  navigate(`/services/${service.name}`);
-                }
-              }}
-            />
+         <ServiceCard
+  key={service.name}
+  service={service}
+  onClick={() => {
+    if (service.name === "Pet Adoption") {
+      navigate("/adopt-form");
+    } else {
+      navigate(`/services/${encodeURIComponent(service.name)}`);
+    }
+  }}
+/>
           ))}
         </div>
       </div>

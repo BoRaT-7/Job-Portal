@@ -5,15 +5,26 @@ const createAdoption = async (req, res) => {
   try {
     const adoptionData = req.body;
 
+    if (!adoptionData.name || !adoptionData.email) {
+      return res.status(400).send({ error: "Missing required fields" });
+    }
+
     adoptionData.status = "pending";
     adoptionData.createdAt = new Date();
 
     const collection = await getAdoptionCollection();
     const result = await collection.insertOne(adoptionData);
 
-    res.send(result);
+    res.status(201).send({
+      success: true,
+      message: "Adoption request created",
+      data: result,
+    });
   } catch (error) {
-    res.status(500).send({ error: "Failed to create adoption" });
+    res.status(500).send({
+      success: false,
+      error: "Failed to create adoption",
+    });
   }
 };
 
@@ -23,9 +34,15 @@ const getAllAdoptions = async (req, res) => {
     const collection = await getAdoptionCollection();
     const result = await collection.find().toArray();
 
-    res.send(result);
+    res.send({
+      success: true,
+      data: result,
+    });
   } catch (error) {
-    res.status(500).send({ error: "Failed to fetch data" });
+    res.status(500).send({
+      success: false,
+      error: "Failed to fetch data",
+    });
   }
 };
 

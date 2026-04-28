@@ -3,7 +3,8 @@ const express = require("express");
 const cors = require("cors");
 
 const connectDB = require("./config/db");
-
+const adoptionRouters = require("./routes/adoptionRoutes");
+const paymentRouters = require("./routes/paymentRoutes");
 const reviewRoutes = require("./routes/reviewRoutes");
 
 const app = express();
@@ -14,6 +15,8 @@ app.use(cors());
 app.use(express.json());
 
 // routes
+app.use("/adoptions", adoptionRouters);
+app.use("/api/payments",paymentRouters);
 app.use("/reviews", reviewRoutes);
 
 app.get("/", (req, res) => {

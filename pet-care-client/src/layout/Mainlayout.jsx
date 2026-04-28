@@ -2,11 +2,25 @@ import React from "react";
 import { Outlet } from "react-router-dom";
 import Navber from "../shared/Navber";
 import Footer from "../pages/Home/Footer";
+import { Toaster } from "react-hot-toast"; // ✅ ADD
 
 const Mainlayout = () => {
   return (
     <div className="flex flex-col min-h-screen">
-      
+
+      {/* ✅ GLOBAL TOASTER (IMPORTANT) */}
+      <Toaster
+        position="top-center"
+        reverseOrder={false}
+        toastOptions={{
+          style: {
+            padding: "14px 20px",
+            fontSize: "16px",
+            borderRadius: "12px",
+          },
+        }}
+      />
+
       {/* Navbar */}
       <Navber />
 
@@ -18,7 +32,7 @@ const Mainlayout = () => {
       {/* Footer */}
       <Footer />
 
-    </div> 
+    </div>
   );
 };
 

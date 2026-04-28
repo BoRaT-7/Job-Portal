@@ -7,7 +7,7 @@ const {
 } = require("../controllers/adoptionController");
 
 // POST
-router.post("/", createAdoption);
+router.post("/create", createAdoption);
 
 // GET
 router.get("/", getAllAdoptions);

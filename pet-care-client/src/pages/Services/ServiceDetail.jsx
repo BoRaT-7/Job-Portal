@@ -1,4 +1,3 @@
-// src/pages/Services/ServiceDetail.jsx
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import toast from "react-hot-toast";
@@ -6,7 +5,11 @@ import { services } from "./serviceData";
 
 export default function ServiceDetail() {
   const { serviceName } = useParams();
-  const service = services.find((s) => s.name === serviceName);
+  const decodedName = decodeURIComponent(serviceName);
+
+  const service = services.find((s) => s.name === decodedName);
+
+  const [showForm, setShowForm] = useState(false);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -23,8 +26,11 @@ export default function ServiceDetail() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Form Data Submitted:", formData); // Later send to backend
-    toast.success(`${serviceName} request submitted successfully! 🎉`);
+
+    console.log("Submitted:", formData);
+
+    toast.success(`${decodedName} request submitted successfully! 🎉`);
+
     setFormData({
       name: "",
       email: "",
@@ -34,105 +40,125 @@ export default function ServiceDetail() {
       petGender: "",
       message: "",
     });
+
+    setShowForm(false);
   };
 
-  if (!service) return <p className="text-center mt-16">Service not found.</p>;
+  if (!service)
+    return <p className="text-center mt-16">Service not found.</p>;
 
   return (
-    <div className="min-h-screen bg-base-100 flex items-center justify-center p-6">
+    <div className="min-h-screen bg-base-100 flex flex-col items-center p-6">
       <div className="bg-white shadow-2xl rounded-3xl max-w-4xl w-full p-8">
+
+        {/* Title */}
         <h2 className="text-3xl font-bold text-primary text-center mb-4">
           {service.emoji} {service.name}
         </h2>
-        <p className="text-gray-600 text-center mb-8">{service.description}</p>
 
-        <form onSubmit={handleSubmit} className="space-y-5">
+        {/* Full Description */}
+        <p className="text-gray-600 text-center mb-6">
+          {service.description}
+        </p>
 
-          {/* User Details */}
-          <input
-            type="text"
-            name="name"
-            placeholder="Your Name"
-            value={formData.name}
-            onChange={handleChange}
-            required
-            className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary outline-none"
-          />
-          <input
-            type="email"
-            name="email"
-            placeholder="Your Email"
-            value={formData.email}
-            onChange={handleChange}
-            required
-            className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary outline-none"
-          />
+        {/* Request Button */}
+        {!showForm && (
+          <div className="text-center">
+            <button
+              onClick={() => setShowForm(true)}
+              className="btn btn-primary px-8 rounded-full"
+            >
+              Request This Service 🚀
+            </button>
+          </div>
+        )}
 
-          {/* Pet Details */}
-          <input
-            type="text"
-            name="petName"
-            placeholder="Your Pet's Name"
-            value={formData.petName}
-            onChange={handleChange}
-            required
-            className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary outline-none"
-          />
+        {/* FORM */}
+        {showForm && (
+          <form onSubmit={handleSubmit} className="space-y-5 mt-8">
 
-          <select
-            name="petType"
-            value={formData.petType}
-            onChange={handleChange}
-            required
-            className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary outline-none"
-          >
-            <option value="">Select Pet Type</option>
-            <option value="Dog">Dog 🐶</option>
-            <option value="Cat">Cat 🐱</option>
-            <option value="Bird">Bird 🐦</option>
-            <option value="Other">Other</option>
-          </select>
+            <input
+              type="text"
+              name="name"
+              placeholder="Your Name"
+              value={formData.name}
+              onChange={handleChange}
+              required
+              className="w-full p-3 border rounded-xl"
+            />
 
-          <input
-            type="number"
-            name="petAge"
-            placeholder="Your Pet's Age (in years)"
-            value={formData.petAge}
-            onChange={handleChange}
-            required
-            className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary outline-none"
-          />
+            <input
+              type="email"
+              name="email"
+              placeholder="Your Email"
+              value={formData.email}
+              onChange={handleChange}
+              required
+              className="w-full p-3 border rounded-xl"
+            />
 
-          <select
-            name="petGender"
-            value={formData.petGender}
-            onChange={handleChange}
-            required
-            className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary outline-none"
-          >
-            <option value="">Select Pet Gender</option>
-            <option value="Male">Male ♂️</option>
-            <option value="Female">Female ♀️</option>
-          </select>
+            <input
+              type="text"
+              name="petName"
+              placeholder="Pet Name"
+              value={formData.petName}
+              onChange={handleChange}
+              required
+              className="w-full p-3 border rounded-xl"
+            />
 
-          {/* Message */}
-          <textarea
-            name="message"
-            placeholder="Additional Details / Message"
-            value={formData.message}
-            onChange={handleChange}
-            rows="4"
-            className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary outline-none"
-          />
+            <select
+              name="petType"
+              value={formData.petType}
+              onChange={handleChange}
+              required
+              className="w-full p-3 border rounded-xl"
+            >
+              <option value="">Select Pet Type</option>
+              <option value="Dog">Dog 🐶</option>
+              <option value="Cat">Cat 🐱</option>
+              <option value="Bird">Bird 🐦</option>
+              <option value="Other">Other</option>
+            </select>
 
-          {/* Submit */}
-          <button
-            type="submit"
-            className="w-full bg-primary text-white py-3 rounded-xl hover:bg-primary-focus transition duration-300"
-          >
-            Submit Request
-          </button>
-        </form>
+            <input
+              type="number"
+              name="petAge"
+              placeholder="Pet Age"
+              value={formData.petAge}
+              onChange={handleChange}
+              required
+              className="w-full p-3 border rounded-xl"
+            />
+
+            <select
+              name="petGender"
+              value={formData.petGender}
+              onChange={handleChange}
+              required
+              className="w-full p-3 border rounded-xl"
+            >
+              <option value="">Select Gender</option>
+              <option value="Male">Male ♂️</option>
+              <option value="Female">Female ♀️</option>
+            </select>
+
+            <textarea
+              name="message"
+              placeholder="Additional Message"
+              value={formData.message}
+              onChange={handleChange}
+              className="w-full p-3 border rounded-xl"
+            />
+
+            <button
+              type="submit"
+              className="w-full bg-primary text-white py-3 rounded-xl"
+            >
+              Submit Request ✅
+            </button>
+          </form>
+        )}
       </div>
     </div>
   );
