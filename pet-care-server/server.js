@@ -6,7 +6,7 @@ const connectDB = require("./config/db");
 const adoptionRouters = require("./routes/adoptionRoutes");
 const paymentRouters = require("./routes/paymentRoutes");
 const reviewRoutes = require("./routes/reviewRoutes");
-
+const serviceRouters = require("./routes/serviceRoutes");
 const app = express();
 const port = process.env.PORT || 5000;
 
@@ -18,6 +18,7 @@ app.use(express.json());
 app.use("/adoptions", adoptionRouters);
 app.use("/api/payments",paymentRouters);
 app.use("/reviews", reviewRoutes);
+app.use("/services",serviceRouters);
 
 app.get("/", (req, res) => {
   res.send("🚀 Pet Care Server Running");

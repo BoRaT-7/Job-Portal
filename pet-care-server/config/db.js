@@ -16,7 +16,7 @@ let db;
 async function connectDB() {
   if (!db) {
     await client.connect();
-    db = client.db("petCareDB"); // 🔥 single DB for whole project
+    db = client.db("petCareDB"); 
     console.log("✅ MongoDB Connected");
   }
   return db;
