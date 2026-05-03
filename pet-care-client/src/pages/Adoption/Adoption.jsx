@@ -1,14 +1,15 @@
 // src/pages/Adoption/Adoption.jsx
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { FaMapMarkerAlt } from "react-icons/fa";
+import axios from "axios";
 
-// Image
+// fallback image
 import DogImg from "../../assets/PaymentForm/zoe-gayah-jonker-G7kUPmzi80E-unsplash.jpg";
 
 const initialPetsData = [
   {
-    id: 1,
+    _id: "1",
     name: "Buddy",
     type: "Dog",
     location: "Dhaka, Bangladesh",
@@ -16,7 +17,7 @@ const initialPetsData = [
     description: "Energetic dog who loves to play and cuddle.",
   },
   {
-    id: 2,
+    _id: "2",
     name: "Simba",
     type: "Cat",
     location: "Chittagong, Bangladesh",
@@ -24,91 +25,25 @@ const initialPetsData = [
     description: "Friendly and playful pet looking for a loving home.",
   },
   {
-    id: 3,
+    _id: "3",
     name: "Coco",
     type: "Bird",
     location: "Sylhet, Bangladesh",
     image: DogImg,
     description: "Colorful parrot, very friendly and talkative.",
   },
-  {
-    id: 4,
-    name: "Milo",
-    type: "Rabbit",
-    location: "Khulna, Bangladesh",
-    image: DogImg,
-    description: "Gentle rabbit, perfect for a calm home.",
-  },
-  {
-    id: 5,
-    name: "Hammy",
-    type: "Hamster",
-    location: "Rajshahi, Bangladesh",
-    image: DogImg,
-    description: "Cute little hamster for small spaces.",
-  },
-  {
-    id: 6,
-    name: "Polly",
-    type: "Parrot",
-    location: "Barishal, Bangladesh",
-    image: DogImg,
-    description: "Talkative parrot that loves attention.",
-  },
-  {
-    id: 7,
-    name: "Goldie",
-    type: "Fish",
-    location: "Rangpur, Bangladesh",
-    image: DogImg,
-    description: "Beautiful fish for your aquarium.",
-  },
-  {
-    id: 8,
-    name: "Ginger",
-    type: "Guinea Pig",
-    location: "Mymensingh, Bangladesh",
-    image: DogImg,
-    description: "Friendly guinea pig that enjoys companionship.",
-  },
-  {
-    id: 9,
-    name: "Shelly",
-    type: "Turtle",
-    location: "Comilla, Bangladesh",
-    image: DogImg,
-    description: "Calm turtle, great for a peaceful home.",
-  },
-  {
-    id: 10,
-    name: "Kitty",
-    type: "Kitten",
-    location: "Dinajpur, Bangladesh",
-    image: DogImg,
-    description: "Playful kitten, perfect for kids.",
-  },
-  {
-    id: 11,
-    name: "Max",
-    type: "Puppy",
-    location: "Sylhet, Bangladesh",
-    image: DogImg,
-    description: "Adorable puppy, loves cuddles.",
-  },
-  {
-    id: 12,
-    name: "Lovebird",
-    type: "Lovebird",
-    location: "Dhaka, Bangladesh",
-    image: DogImg,
-    description: "Colorful lovebird, very social and friendly.",
-  },
 ];
+
+const api = axios.create({
+  baseURL: "http://localhost:5000",
+});
 
 const Adoption = () => {
   const [selectedType, setSelectedType] = useState("All");
   const [showForm, setShowForm] = useState(false);
   const [petsData, setPetsData] = useState(initialPetsData);
+  const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -118,6 +53,26 @@ const Adoption = () => {
     imageUrl: "",
     imageFile: null,
   });
+
+  useEffect(() => {
+    fetchPets();
+  }, []);
+
+  const fetchPets = async () => {
+    try {
+      setLoading(true);
+
+      const res = await api.get("/pets");
+
+      if (Array.isArray(res.data) && res.data.length > 0) {
+        setPetsData(res.data);
+      }
+    } catch (error) {
+      console.log("Failed to fetch pets:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const filteredPets =
     selectedType === "All"
@@ -129,7 +84,7 @@ const Adoption = () => {
   const handleChange = (e) => {
     const { name, value, files } = e.target;
 
-    if (name === "imageFile" && files[0]) {
+    if (name === "imageFile" && files?.[0]) {
       setFormData((prev) => ({
         ...prev,
         imageFile: files[0],
@@ -143,50 +98,63 @@ const Adoption = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const resetForm = () => {
+    setFormData({
+      name: "",
+      type: "",
+      location: "",
+      description: "",
+      imageUrl: "",
+      imageFile: null,
+    });
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const createPet = (image) => {
-      const newPet = {
-        id: Date.now(),
-        name: formData.name,
-        type: formData.type,
-        location: formData.location,
-        description: formData.description,
-        image: image || DogImg,
-      };
+    try {
+      setSubmitting(true);
 
-      setPetsData((prev) => [newPet, ...prev]);
+      const data = new FormData();
 
-      setFormData({
-        name: "",
-        type: "",
-        location: "",
-        description: "",
-        imageUrl: "",
-        imageFile: null,
+      data.append("name", formData.name);
+      data.append("type", formData.type);
+      data.append("location", formData.location);
+      data.append("description", formData.description);
+
+      if (formData.imageFile) {
+        data.append("image", formData.imageFile);
+      }
+
+      const res = await api.post("/pets", data, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       });
 
-      setShowForm(false);
-    };
+      if (res.data?.pet) {
+        setPetsData((prev) => [res.data.pet, ...prev]);
+      }
 
-    if (formData.imageFile) {
-      const reader = new FileReader();
-      reader.onloadend = () => createPet(reader.result);
-      reader.readAsDataURL(formData.imageFile);
-    } else {
-      createPet(formData.imageUrl || DogImg);
+      resetForm();
+      setShowForm(false);
+    } catch (error) {
+      console.log("Failed to create pet:", error);
+      alert("Failed to add pet");
+    } finally {
+      setSubmitting(false);
     }
   };
 
   return (
     <section className="py-16 bg-white">
       <div className="max-w-7xl mx-auto px-6">
-        {/* Section Title */}
+        {/* title */}
         <div className="text-center mb-8">
           <h2 className="text-4xl font-bold text-primary">
             🐾 Pet Adoption Center
           </h2>
+
           <p className="mt-2 text-gray-600 max-w-2xl mx-auto">
             Give a loving home to pets waiting for care and affection. Browse
             our adorable pets and find your perfect companion today!
@@ -200,62 +168,66 @@ const Adoption = () => {
           </button>
         </div>
 
-        {/* Filter Buttons */}
+        {/* filter */}
         <div className="flex justify-center flex-wrap gap-3 mb-12">
           {petTypes.map((type) => (
             <button
               key={type}
+              onClick={() => setSelectedType(type)}
               className={`px-4 py-2 rounded-full font-medium transition ${
                 selectedType === type
                   ? "bg-primary text-white"
                   : "bg-gray-200 text-gray-700 hover:bg-gray-300"
               }`}
-              onClick={() => setSelectedType(type)}
             >
               {type}
             </button>
           ))}
         </div>
 
-        {/* Pet Cards */}
-        <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-          {filteredPets.map((pet) => (
-            <div
-              key={pet.id}
-              className="bg-gray-50 rounded-2xl shadow-md overflow-hidden hover:shadow-xl transition duration-300 hover:-translate-y-2"
-            >
-              <img
-                src={pet.image}
-                alt={pet.name}
-                className="h-56 w-full object-cover"
-              />
+        {/* loading */}
+        {loading ? (
+          <div className="text-center text-gray-500 py-10">Loading pets...</div>
+        ) : (
+          <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+            {filteredPets.map((pet) => (
+              <div
+                key={pet._id}
+                className="bg-gray-50 rounded-2xl shadow-md overflow-hidden hover:shadow-xl transition duration-300 hover:-translate-y-2"
+              >
+                <img
+                  src={pet.image || DogImg}
+                  alt={pet.name}
+                  className="h-56 w-full object-cover"
+                />
 
-              <div className="p-5">
-                <h3 className="text-xl font-semibold text-gray-800">
-                  {pet.name}
-                </h3>
+                <div className="p-5">
+                  <h3 className="text-xl font-semibold text-gray-800">
+                    {pet.name}
+                  </h3>
 
-                <p className="text-sm text-gray-500 flex items-center gap-2 mt-1">
-                  <FaMapMarkerAlt className="text-pink-500" />
-                  {pet.location}
-                </p>
+                  <p className="text-sm text-gray-500 flex items-center gap-2 mt-1">
+                    <FaMapMarkerAlt className="text-pink-500" />
+                    {pet.location}
+                  </p>
 
-                <p className="text-sm text-gray-600 mt-2">
-                  {pet.description}
-                </p>
+                  <p className="text-sm text-gray-600 mt-2">
+                    {pet.description}
+                  </p>
 
-                <Link to="/adopt-form">
-                  <button className="btn btn-primary w-full mt-4 hover:scale-105 transition duration-300">
-                    Adopt Now 🐾
-                  </button>
-                </Link>
+                  <Link to="/adopt-form">
+                    <button className="btn btn-primary w-full mt-4 hover:scale-105 transition duration-300">
+                      Adopt Now 🐾
+                    </button>
+                  </Link>
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
 
-      {/* Add Pet Form Modal */}
+      {/* modal */}
       {showForm && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 px-4">
           <div className="bg-white rounded-2xl w-full max-w-lg p-6 relative">
@@ -311,15 +283,6 @@ const Adoption = () => {
               />
 
               <input
-                type="text"
-                name="imageUrl"
-                value={formData.imageUrl}
-                onChange={handleChange}
-                placeholder="Photo URL (optional)"
-                className="input input-bordered w-full"
-              />
-
-              <input
                 type="file"
                 name="imageFile"
                 accept="image/*"
@@ -327,8 +290,12 @@ const Adoption = () => {
                 className="file-input file-input-bordered w-full"
               />
 
-              <button type="submit" className="btn btn-primary w-full">
-                Submit Pet
+              <button
+                type="submit"
+                disabled={submitting}
+                className="btn btn-primary w-full"
+              >
+                {submitting ? "Submitting..." : "Submit Pet"}
               </button>
             </form>
           </div>

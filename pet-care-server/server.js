@@ -3,6 +3,7 @@ const express = require("express");
 const cors = require("cors");
 
 const connectDB = require("./config/db");
+const petRoutes = require("./routes/petRoutes");
 const adoptionRouters = require("./routes/adoptionRoutes");
 const paymentRouters = require("./routes/paymentRoutes");
 const reviewRoutes = require("./routes/reviewRoutes");
@@ -19,7 +20,9 @@ app.use("/adoptions", adoptionRouters);
 app.use("/api/payments",paymentRouters);
 app.use("/reviews", reviewRoutes);
 app.use("/services",serviceRouters);
-
+app.use(cors());
+app.use(express.json({ limit: "2mb" }));
+app.use("/pets", petRoutes);
 app.get("/", (req, res) => {
   res.send("🚀 Pet Care Server Running");
 });
