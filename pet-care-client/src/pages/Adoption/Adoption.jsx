@@ -61,7 +61,6 @@ const Adoption = () => {
   const fetchPets = async () => {
     try {
       setLoading(true);
-
       const res = await api.get("/pets");
 
       if (Array.isArray(res.data) && res.data.length > 0) {
@@ -116,7 +115,6 @@ const Adoption = () => {
       setSubmitting(true);
 
       const data = new FormData();
-
       data.append("name", formData.name);
       data.append("type", formData.type);
       data.append("location", formData.location);
@@ -149,6 +147,7 @@ const Adoption = () => {
   return (
     <section className="py-16 bg-white">
       <div className="max-w-7xl mx-auto px-6">
+
         {/* title */}
         <div className="text-center mb-8">
           <h2 className="text-4xl font-bold text-primary">
@@ -156,8 +155,7 @@ const Adoption = () => {
           </h2>
 
           <p className="mt-2 text-gray-600 max-w-2xl mx-auto">
-            Give a loving home to pets waiting for care and affection. Browse
-            our adorable pets and find your perfect companion today!
+            Give a loving home to pets waiting for care and affection.
           </p>
 
           <button
@@ -174,10 +172,10 @@ const Adoption = () => {
             <button
               key={type}
               onClick={() => setSelectedType(type)}
-              className={`px-4 py-2 rounded-full font-medium transition ${
+              className={`px-4 py-2 rounded-full ${
                 selectedType === type
                   ? "bg-primary text-white"
-                  : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                  : "bg-gray-200"
               }`}
             >
               {type}
@@ -185,15 +183,31 @@ const Adoption = () => {
           ))}
         </div>
 
-        {/* loading */}
+        {/* 🔥 Skeleton Loader Added Here */}
         {loading ? (
-          <div className="text-center text-gray-500 py-10">Loading pets...</div>
+          <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+            {[...Array(8)].map((_, i) => (
+              <div
+                key={i}
+                className="bg-gray-100 rounded-2xl shadow animate-pulse overflow-hidden"
+              >
+                <div className="h-56 bg-gray-300"></div>
+
+                <div className="p-5 space-y-3">
+                  <div className="h-4 bg-gray-300 rounded w-3/4"></div>
+                  <div className="h-3 bg-gray-300 rounded w-1/2"></div>
+                  <div className="h-3 bg-gray-300 rounded w-full"></div>
+                  <div className="h-10 bg-gray-300 rounded mt-4"></div>
+                </div>
+              </div>
+            ))}
+          </div>
         ) : (
           <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
             {filteredPets.map((pet) => (
               <div
                 key={pet._id}
-                className="bg-gray-50 rounded-2xl shadow-md overflow-hidden hover:shadow-xl transition duration-300 hover:-translate-y-2"
+                className="bg-gray-50 rounded-2xl shadow-md overflow-hidden hover:shadow-xl transition"
               >
                 <img
                   src={pet.image || DogImg}
@@ -202,9 +216,7 @@ const Adoption = () => {
                 />
 
                 <div className="p-5">
-                  <h3 className="text-xl font-semibold text-gray-800">
-                    {pet.name}
-                  </h3>
+                  <h3 className="text-xl font-semibold">{pet.name}</h3>
 
                   <p className="text-sm text-gray-500 flex items-center gap-2 mt-1">
                     <FaMapMarkerAlt className="text-pink-500" />
@@ -216,7 +228,7 @@ const Adoption = () => {
                   </p>
 
                   <Link to="/adopt-form">
-                    <button className="btn btn-primary w-full mt-4 hover:scale-105 transition duration-300">
+                    <button className="btn btn-primary w-full mt-4">
                       Adopt Now 🐾
                     </button>
                   </Link>
@@ -227,7 +239,7 @@ const Adoption = () => {
         )}
       </div>
 
-      {/* modal */}
+      {/* modal (unchanged) */}
       {showForm && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 px-4">
           <div className="bg-white rounded-2xl w-full max-w-lg p-6 relative">
@@ -243,58 +255,13 @@ const Adoption = () => {
             </h3>
 
             <form onSubmit={handleSubmit} className="space-y-4">
-              <input
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                placeholder="Pet Name"
-                required
-                className="input input-bordered w-full"
-              />
+              <input name="name" value={formData.name} onChange={handleChange} placeholder="Pet Name" required className="input input-bordered w-full" />
+              <input name="type" value={formData.type} onChange={handleChange} placeholder="Pet Type" required className="input input-bordered w-full" />
+              <input name="location" value={formData.location} onChange={handleChange} placeholder="Location" required className="input input-bordered w-full" />
+              <textarea name="description" value={formData.description} onChange={handleChange} placeholder="Pet Description" required className="textarea textarea-bordered w-full" />
+              <input type="file" name="imageFile" onChange={handleChange} className="file-input file-input-bordered w-full" />
 
-              <input
-                type="text"
-                name="type"
-                value={formData.type}
-                onChange={handleChange}
-                placeholder="Pet Type"
-                required
-                className="input input-bordered w-full"
-              />
-
-              <input
-                type="text"
-                name="location"
-                value={formData.location}
-                onChange={handleChange}
-                placeholder="Location"
-                required
-                className="input input-bordered w-full"
-              />
-
-              <textarea
-                name="description"
-                value={formData.description}
-                onChange={handleChange}
-                placeholder="Pet Description"
-                required
-                className="textarea textarea-bordered w-full"
-              />
-
-              <input
-                type="file"
-                name="imageFile"
-                accept="image/*"
-                onChange={handleChange}
-                className="file-input file-input-bordered w-full"
-              />
-
-              <button
-                type="submit"
-                disabled={submitting}
-                className="btn btn-primary w-full"
-              >
+              <button type="submit" disabled={submitting} className="btn btn-primary w-full">
                 {submitting ? "Submitting..." : "Submit Pet"}
               </button>
             </form>
