@@ -1,0 +1,98 @@
+[
+  {
+    "_id": "1",
+    "name": "Buddy",
+    "type": "Dog",
+    "location": "Dhaka, Bangladesh",
+    "image": "https://images.unsplash.com/photo-1517849845537-4d257902454a",
+    "description": "Energetic dog who loves to play and cuddle."
+  },
+  {
+    "_id": "2",
+    "name": "Simba",
+    "type": "Cat",
+    "location": "Chittagong, Bangladesh",
+    "image": "https://images.unsplash.com/photo-1519052537078-e6302a4968d4",
+    "description": "Friendly and playful pet looking for a loving home."
+  },
+  {
+    "_id": "3",
+    "name": "Coco",
+    "type": "Bird",
+    "location": "Sylhet, Bangladesh",
+    "image": "https://images.unsplash.com/photo-1444464666168-49d633b86797",
+    "description": "Colorful parrot, very friendly and talkative."
+  },
+  {
+    "_id": "4",
+    "name": "Max",
+    "type": "Dog",
+    "location": "Khulna, Bangladesh",
+    "image": "https://images.unsplash.com/photo-1543466835-00a7907e9de1",
+    "description": "Loyal and protective dog, great for families."
+  },
+  {
+    "_id": "5",
+    "name": "Luna",
+    "type": "Cat",
+    "location": "Rajshahi, Bangladesh",
+    "image": "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba",
+    "description": "Calm and affectionate companion."
+  },
+  {
+    "_id": "6",
+    "name": "Rocky",
+    "type": "Dog",
+    "location": "Barisal, Bangladesh",
+    "image": "https://images.unsplash.com/photo-1518717758536-85ae29035b6d",
+    "description": "Strong and active dog who loves outdoor play."
+  },
+  {
+    "_id": "7",
+    "name": "Milo",
+    "type": "Cat",
+    "location": "Rangpur, Bangladesh",
+    "image": "https://images.unsplash.com/photo-1495360010541-f48722b34f7d",
+    "description": "Curious and playful kitten full of energy."
+  },
+  {
+    "_id": "8",
+    "name": "Bella",
+    "type": "Dog",
+    "location": "Mymensingh, Bangladesh",
+    "image": "https://images.unsplash.com/photo-1507146426996-ef05306b995a",
+    "description": "Friendly dog who loves attention and cuddles."
+  },
+  {
+    "_id": "9",
+    "name": "Charlie",
+    "type": "Bird",
+    "location": "Dhaka, Bangladesh",
+    "image": "https://images.unsplash.com/photo-1452570053594-1b985d6ea890",
+    "description": "Small bird with a cheerful and lively personality."
+  },
+  {
+    "_id": "10",
+    "name": "Lucy",
+    "type": "Cat",
+    "location": "Chittagong, Bangladesh",
+    "image": "https://images.unsplash.com/photo-1472491235688-bdc81a63246e",
+    "description": "Gentle and loving cat, perfect for home."
+  },
+  {
+    "_id": "11",
+    "name": "Daisy",
+    "type": "Dog",
+    "location": "Sylhet, Bangladesh",
+    "image": "https://images.unsplash.com/photo-1517423440428-a5a00ad493e8",
+    "description": "Happy and friendly dog who enjoys human company."
+  },
+  {
+    "_id": "12",
+    "name": "Oscar",
+    "type": "Cat",
+    "location": "Khulna, Bangladesh",
+    "image": "https://images.unsplash.com/photo-1543852786-1cf6624b9987",
+    "description": "Smart and quiet cat with a charming personality."
+  }
+]

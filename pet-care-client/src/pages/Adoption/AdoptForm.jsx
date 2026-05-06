@@ -1,10 +1,13 @@
 import React, { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import catImg from "../../assets/Adopt-from/cute-cat-relaxing-indoors-removebg-preview.png";
-import dogImg from "../../assets/Adopt-from/Dog.png";
 
 export default function AdoptForm() {
-  // ✅ ONLY ONE STATE (FIXED)
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const pet = location.state?.pet;
+
   const [success, setSuccess] = useState(false);
 
   const [formData, setFormData] = useState({
@@ -27,132 +30,113 @@ export default function AdoptForm() {
     try {
       const res = await fetch("http://localhost:5000/adoptions/create", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...formData,
+          pet,
+        }),
       });
 
       const data = await res.json();
 
       if (data.success) {
         setSuccess(true);
-
-        setFormData({
-          name: "",
-          email: "",
-          phone: "",
-          address: "",
-        });
       } else {
-        toast.error("Failed to submit ❌");
+        toast.error("Failed!");
       }
-    } catch (error) {
-      console.error(error);
-      toast.error("Error submitting form ❌");
+    } catch (err) {
+      toast.error("Server error");
     }
   };
 
+  // ✅ FIX: NO PET HANDLING
+  if (!pet) {
+    return (
+      <div className="h-screen flex items-center justify-center text-red-500">
+        ⚠ No pet selected. Please go back.
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-screen bg-gradient-to-r from-pink-50 to-purple-100 flex items-center justify-center p-6">
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 p-6">
 
-      {/* ✅ SUCCESS MODAL */}
+      {/* SUCCESS */}
       {success && (
-        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-          <div className="bg-white w-[90%] md:w-1/3 p-8 rounded-2xl shadow-2xl text-center animate-bounce">
-
-            <div className="text-5xl mb-3">🐾</div>
-
-            <h2 className="text-2xl font-bold text-green-600">
-              Adoption Successful
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center">
+          <div className="bg-white p-6 rounded-2xl text-center w-96">
+            <h2 className="text-green-600 text-xl font-bold">
+              Adoption Successful 🐾
             </h2>
 
-            <p className="text-gray-500 mt-2">
-              Your adoption request has been submitted successfully.
-            </p>
-
             <button
-              onClick={() => setSuccess(false)}
-              className="mt-5 bg-green-500 text-white px-6 py-2 rounded-xl hover:bg-green-600"
+              onClick={() => navigate("/")}
+              className="mt-4 bg-green-500 text-white px-4 py-2 rounded"
             >
-              OK
+              Go Home
             </button>
-
           </div>
         </div>
       )}
 
-      <div className="bg-white shadow-2xl rounded-3xl overflow-hidden max-w-5xl w-full grid md:grid-cols-2">
+      <div className="grid md:grid-cols-2 bg-white shadow-2xl rounded-2xl overflow-hidden w-full max-w-5xl">
 
         {/* LEFT */}
-        <div className="bg-pink-100 flex flex-col items-center justify-center p-8 relative">
-          <h2 className="text-3xl font-bold text-pink-600 mb-4 text-center">
-            🐾 Find Your Best Friend
+        <div className="bg-cyan-600 text-white p-8">
+          <img
+            src={pet.image}
+            alt={pet.name}
+            className="w-full h-64 object-cover rounded-xl mb-4"
+          />
+
+          <h2 className="text-2xl font-bold">
+            Adopt {pet.name}
           </h2>
 
-          <p className="text-gray-600 text-center mb-6">
-            Give a loving home to a pet and make a lifelong companion.
-          </p>
-
-          <div className="flex items-end gap-4">
-            <img src={catImg} className="w-40 drop-shadow-xl" />
-            <img src={dogImg} className="w-40 drop-shadow-xl" />
-          </div>
+          <p className="mt-2">{pet.description}</p>
+          <p className="mt-2 text-sm">📍 {pet.location}</p>
         </div>
 
         {/* RIGHT */}
-        <div className="p-10">
-          <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">
-            Adoption Form
-          </h2>
+        <div className="p-8">
+          <h2 className="text-xl font-bold mb-4">Adoption Form</h2>
 
-          <form onSubmit={handleSubmit} className="space-y-5">
+          <form onSubmit={handleSubmit} className="space-y-4">
 
             <input
-              type="text"
               name="name"
-              placeholder="Your Name"
-              value={formData.name}
+              placeholder="Name"
               onChange={handleChange}
+              className="w-full border p-2 rounded"
               required
-              className="w-full p-3 border rounded-xl"
             />
 
             <input
-              type="email"
               name="email"
-              placeholder="Your Email"
-              value={formData.email}
+              placeholder="Email"
               onChange={handleChange}
+              className="w-full border p-2 rounded"
               required
-              className="w-full p-3 border rounded-xl"
             />
 
             <input
-              type="text"
               name="phone"
-              placeholder="Phone Number"
-              value={formData.phone}
+              placeholder="Phone"
               onChange={handleChange}
+              className="w-full border p-2 rounded"
               required
-              className="w-full p-3 border rounded-xl"
             />
 
             <textarea
               name="address"
-              placeholder="Your Address"
-              value={formData.address}
+              placeholder="Address"
               onChange={handleChange}
+              className="w-full border p-2 rounded"
               required
-              rows="3"
-              className="w-full p-3 border rounded-xl"
             />
 
-            <button
-              type="submit"
-              className="w-full bg-pink-500 text-white py-3 rounded-xl hover:bg-pink-600 transition"
-            >
-              Submit Adoption Request 🐾
+            <button className="w-full bg-cyan-500 text-white py-2 rounded">
+              Submit 🐾
             </button>
 
           </form>
