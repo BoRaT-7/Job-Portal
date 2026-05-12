@@ -78,6 +78,15 @@ const Home = () => {
                   </div>
                 ))}
               </div>
+              <div>
+                <p>If you adop your pet </p>
+                  <button
+            onClick={() => navigate("/add-adoption")}
+            className="mt-5 px-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-600 text-white rounded-xl shadow-lg"
+          >
+            + Add Your Pet
+          </button>
+              </div>
             </div>
           </div>
         </div>

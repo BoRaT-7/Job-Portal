@@ -1,32 +1,50 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import petsJson from "../../data/PetDogs.json";
 
 const Adoption = () => {
+  const navigate = useNavigate();
+
   const [selectedType, setSelectedType] = useState("All");
+  const [pets, setPets] = useState([]);
+
+  // load + localStorage support
+  useEffect(() => {
+    const savedPets = JSON.parse(localStorage.getItem("pets")) || petsJson;
+    setPets(savedPets);
+  }, []);
 
   const filteredPets =
     selectedType === "All"
-      ? petsJson
-      : petsJson.filter((pet) => pet.type === selectedType);
+      ? pets
+      : pets.filter((pet) => pet.type === selectedType);
 
-  const petTypes = ["All", ...new Set(petsJson.map((pet) => pet.type))];
+  const petTypes = ["All", ...new Set(pets.map((pet) => pet.type))];
 
   return (
     <section className="py-16 bg-white">
       <div className="max-w-7xl mx-auto px-6">
 
-        {/* TITLE */}
+        {/* HEADER */}
         <div className="text-center mb-8">
           <h2 className="text-4xl font-bold">🐾 Pet Adoption Center</h2>
+
           <p className="text-gray-600 mt-2">
             Find your perfect companion today
           </p>
+
+          {/* ✅ ADD PET BUTTON */}
+          <button
+            onClick={() => navigate("/add-adoption")}
+            className="mt-5 px-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-600 text-white rounded-xl shadow-lg"
+          >
+            + Add Your Pet
+          </button>
         </div>
 
         {/* FILTER */}
-        <div className="flex justify-center gap-3 mb-10">
+        <div className="flex justify-center gap-3 mb-10 flex-wrap">
           {petTypes.map((type) => (
             <button
               key={type}
@@ -66,7 +84,6 @@ const Adoption = () => {
                   {pet.description}
                 </p>
 
-                {/* PASS PET DATA */}
                 <Link to="/adopt-form" state={{ pet }}>
                   <button className="mt-4 w-full bg-cyan-500 text-white py-2 rounded-xl">
                     Adopt Now 🐾

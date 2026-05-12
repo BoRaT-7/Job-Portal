@@ -10,6 +10,7 @@ import Petfood from "../pages/Petfood/Petfood";
 import AdoptForm from "../pages/Adoption/AdoptForm";
 import PaymentForm from "../pages/Petfood/PaymentForm";
 import Adoption from "../pages/Adoption/Adoption";
+import Addadoption from "../pages/Adoption/Addadoption"; // ✅ ADD THIS IMPORT
 
 const router = createBrowserRouter([
   {
@@ -20,6 +21,7 @@ const router = createBrowserRouter([
       { path: "services", element: <Services /> },
       { path: "services/:serviceName", element: <ServiceDetail /> },
       { path: "adoption", element: <Adoption /> },
+      { path: "add-adoption", element: <Addadoption /> }, // ✅ HERE
       { path: "adopt-form", element: <AdoptForm /> },
       { path: "petfood", element: <Petfood /> },
       { path: "payment", element: <PaymentForm /> },
