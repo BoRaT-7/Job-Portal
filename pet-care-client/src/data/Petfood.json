@@ -1,0 +1,98 @@
+[
+  {
+    "id": 1,
+    "name": "Premium Dog Food",
+    "category": "Dog",
+    "image": "https://images.unsplash.com/photo-1589924691995-400dc9ecc119?auto=format&fit=crop&w=800&q=80",
+    "price": 25,
+    "rating": 4.5
+  },
+  {
+    "id": 2,
+    "name": "Healthy Puppy Meal",
+    "category": "Dog",
+    "image": "https://images.unsplash.com/photo-1568640347023-a616a30bc3bd?auto=format&fit=crop&w=800&q=80",
+    "price": 30,
+    "rating": 4.8
+  },
+  {
+    "id": 3,
+    "name": "Dog Kibble Bowl",
+    "category": "Dog",
+    "image": "https://images.unsplash.com/photo-1601758228041-f3b2795255f1?auto=format&fit=crop&w=800&q=80",
+    "price": 22,
+    "rating": 4.6
+  },
+  {
+    "id": 4,
+    "name": "Dry Dog Food Mix",
+    "category": "Dog",
+    "image": "https://images.unsplash.com/photo-1611174743420-3d7df880ce32?auto=format&fit=crop&w=800&q=80",
+    "price": 28,
+    "rating": 4.7
+  },
+  {
+    "id": 5,
+    "name": "Cat Dry Food Bowl",
+    "category": "Cat",
+    "image": "https://i.ibb.co/ycfhtmgw/download-5.jpg",
+    "price": 15,
+    "rating": 4.3
+  },
+  {
+    "id": 6,
+    "name": "Cat Kibble Premium",
+    "category": "Cat",
+    "image": "https://i.ibb.co/23VVmc2T/images-6.jpg",
+    "price": 18,
+    "rating": 4.4
+  },
+  {
+    "id": 7,
+    "name": "Fish Food Flakes Jar",
+    "category": "Fish",
+    "image": "https://i.ibb.co/s9vBxj1b/images-5.jpg",
+    "price": 12,
+    "rating": 4.2
+  },
+  {
+    "id": 8,
+    "name": "Aquarium Fish Pellets",
+    "category": "Fish",
+    "image": "https://i.ibb.co/24h1xmf/images-4.jpg",
+    "price": 14,
+    "rating": 4.5
+  },
+  {
+    "id": 9,
+    "name": "Fish Food Container",
+    "category": "Fish",
+    "image": "https://i.ibb.co/Vc9SzYLp/images-7.jpg",
+    "price": 16,
+    "rating": 4.3
+  },
+  {
+    "id": 10,
+    "name": "Rabbit Pellets Mix",
+    "category": "Rabbit",
+    "image": "https://i.ibb.co/KzmmtnCK/images-2.jpg",
+    "price": 20,
+    "rating": 4.6
+  },
+  {
+    "id": 11,
+    "name": "Rabbit Hay Food Mix",
+    "category": "Rabbit",
+    "image": "https://images.unsplash.com/photo-1601758125946-6ec2ef64daf8?auto=format&fit=crop&w=800&q=80",
+    "price": 24,
+    "rating": 4.7
+  },
+  {
+    "id": 12,
+    "name": "Small Pet Food Bowl",
+    "category": "Small Pet",
+    "image": "https://i.ibb.co/ycfhtmgw/download-5.jpg",
+    "price": 16,
+    "rating": 4.8
+  }
+]
