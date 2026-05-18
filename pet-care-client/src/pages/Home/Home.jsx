@@ -100,73 +100,83 @@ const Home = () => {
         </div>
       </section>
 
-      {/* ================= ADOPTION SECTION ================= */}
-      <section className="py-16 bg-white">
-        <div className="container mx-auto px-6">
-          <h2 className="text-4xl text-center font-bold text-gray-800 mb-3">
-            🐾 Available for Adoption
-          </h2>
+     {/* ================= ADOPTION SECTION ================= */}
+<section className="py-16 bg-white">
+  <div className="container mx-auto px-6">
 
-          <p className="text-center text-gray-600 max-w-2xl mx-auto mb-12 leading-relaxed">
-            Give a loving home to pets who are waiting for care and affection.
-            Browse our available pets and find your perfect companion today.
-            Every adoption saves a life and brings endless joy to your family.
-          </p>
+    <h2 className="text-4xl text-center font-bold text-gray-800 mb-3">
+      🐾 Available for Adoption
+    </h2>
 
-          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-            {petsJson.slice(0, 6).map((pet) => (
-              <div
-                key={pet._id}
-                className="group bg-gray-50 rounded-2xl shadow-md overflow-hidden hover:shadow-2xl transition duration-300 hover:-translate-y-2"
-              >
-                <div className="overflow-hidden">
-                  <img
-                    src={pet.image}
-                    alt={pet.name}
-                    className="h-56 w-full object-cover group-hover:scale-110 transition duration-500"
-                  />
-                </div>
+    <p className="text-center text-gray-600 max-w-2xl mx-auto mb-12 leading-relaxed">
+      Give a loving home to pets who are waiting for care and affection.
+      Browse our available pets and find your perfect companion today.
+      Every adoption saves a life and brings endless joy to your family.
+    </p>
 
-                <div className="p-5">
-                  <div className="flex items-center justify-between">
-                    <h3 className="text-xl font-semibold text-gray-800">
-                      {pet.name}
-                    </h3>
+    {/* SAFE RENDER (FIXED) */}
+    <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+      {(Array.isArray(petsJson) ? petsJson : [])
+        .slice(0, 6)
+        .map((pet, index) => (
+          <div
+            key={pet._id || index}
+            className="group bg-gray-50 rounded-2xl shadow-md overflow-hidden hover:shadow-2xl transition duration-300 hover:-translate-y-2"
+          >
+            <div className="overflow-hidden">
+              <img
+                src={pet.image}
+                alt={pet.name}
+                loading="lazy"
+                className="h-56 w-full object-cover group-hover:scale-110 transition duration-500"
+                onError={(e) => {
+                  e.target.src =
+                    "https://via.placeholder.com/400x300?text=Pet+Image";
+                }}
+              />
+            </div>
 
-                    <span className="text-xs bg-cyan-100 text-cyan-700 px-3 py-1 rounded-full">
-                      {pet.type}
-                    </span>
-                  </div>
+            <div className="p-5">
+              <div className="flex items-center justify-between">
+                <h3 className="text-xl font-semibold text-gray-800">
+                  {pet.name}
+                </h3>
 
-                  <p className="text-sm text-gray-500 flex items-center gap-2 mt-2">
-                    <FaMapMarkerAlt className="text-pink-500" />
-                    {pet.location}
-                  </p>
-
-                  <p className="text-sm text-gray-600 mt-3 line-clamp-2 leading-relaxed">
-                    {pet.description}
-                  </p>
-
-                  <Link to="/adopt-form" state={{ pet }}>
-                    <button className="btn btn-primary w-full mt-5 hover:scale-105 transition duration-300">
-                      Adopt Now 🐾
-                    </button>
-                  </Link>
-                </div>
+                <span className="text-xs bg-cyan-100 text-cyan-700 px-3 py-1 rounded-full">
+                  {pet.type}
+                </span>
               </div>
-            ))}
-          </div>
 
-          <div className="text-center mt-12">
-            <Link to="/adoption">
-              <button className="btn btn-primary px-8 hover:scale-105 transition duration-300">
-                See All Adoption →
-              </button>
-            </Link>
-          </div>
-        </div>
-      </section>
+              <p className="text-sm text-gray-500 flex items-center gap-2 mt-2">
+                <span className="text-pink-500">📍</span>
+                {pet.location}
+              </p>
 
+              <p className="text-sm text-gray-600 mt-3 line-clamp-2 leading-relaxed">
+                {pet.description}
+              </p>
+
+              <Link to="/adopt-form" state={{ pet }}>
+                <button className="btn btn-primary w-full mt-5 hover:scale-105 transition duration-300">
+                  Adopt Now 🐾
+                </button>
+              </Link>
+            </div>
+          </div>
+        ))}
+    </div>
+
+    {/* VIEW ALL */}
+    <div className="text-center mt-12">
+      <Link to="/adoption">
+        <button className="btn btn-primary px-8 hover:scale-105 transition duration-300">
+          See All Adoption →
+        </button>
+      </Link>
+    </div>
+
+  </div>
+</section>
       {/* ================= PET FOOD SECTION ================= */}
       <FoodSection />
 

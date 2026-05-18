@@ -1,20 +1,60 @@
-import petfood1 from "../../assets/petfood/petfood.jpg";
-import petfood2 from "../../assets/petfood/petfood2.jpg";
 import { Link, useNavigate } from "react-router-dom";
+
 const petFoods = [
-  { id: 1, name: "Premium Dog Food", category: "Dog", image: petfood1, price: 1200 },
-  { id: 2, name: "Healthy Puppy Meal", category: "Dog", image: petfood2, price: 1500 },
-  { id: 3, name: "Organic Cat Food", category: "Cat", image: petfood1, price: 1100 },
-  { id: 4, name: "Kitten Growth Formula", category: "Cat", image: petfood2, price: 1300 },
-  { id: 5, name: "Bird Nutri Mix", category: "Bird", image: petfood1, price: 900 },
-  { id: 6, name: "Parrot Special Seeds", category: "Bird", image: petfood2, price: 1000 },
+  {
+    id: 1,
+    name: "Premium Dog Food",
+    category: "Dog",
+    image:
+      "https://images.unsplash.com/photo-1583511655826-05700442b31b?q=80&w=1200&auto=format&fit=crop",
+    price: 1200,
+  },
+  {
+    id: 2,
+    name: "Healthy Puppy Meal",
+    category: "Dog",
+    image:
+      "https://images.unsplash.com/photo-1568640347023-a616a30bc3bd?q=80&w=1200&auto=format&fit=crop",
+    price: 1500,
+  },
+  {
+    id: 3,
+    name: "Organic Cat Food",
+    category: "Cat",
+    image:
+      "https://images.unsplash.com/photo-1519052537078-e6302a4968d4?q=80&w=1200&auto=format&fit=crop",
+    price: 1100,
+  },
+  {
+    id: 4,
+    name: "Kitten Growth Formula",
+    category: "Cat",
+    image:
+      "https://images.unsplash.com/photo-1574158622682-e40e69881006?q=80&w=1200&auto=format&fit=crop",
+    price: 1300,
+  },
+  {
+    id: 5,
+    name: "Bird Nutri Mix",
+    category: "Bird",
+    image:
+      "https://images.unsplash.com/photo-1444464666168-49d633b86797?q=80&w=1200&auto=format&fit=crop",
+    price: 900,
+  },
+  {
+    id: 6,
+    name: "Parrot Special Seeds",
+    category: "Bird",
+    image:
+      "https://images.unsplash.com/photo-1522926193341-e9ffd686c60f?q=80&w=1200&auto=format&fit=crop",
+    price: 1000,
+  },
 ];
 
 const FoodSection = () => {
   const navigate = useNavigate();
 
   const handleBuyNow = (food) => {
-    // PaymentForm.jsx-এ food পাঠানো হচ্ছে
     navigate("/payment", { state: { food } });
   };
 
@@ -24,9 +64,10 @@ const FoodSection = () => {
         <h2 className="text-4xl text-center font-bold text-gray-800 mb-3">
           🍖 Healthy Pet Food
         </h2>
+
         <p className="text-center text-gray-600 max-w-2xl mx-auto mb-6">
-          Provide your beloved pets with premium, nutritious food designed to keep them healthy, active, and happy. 
-          Treat your furry friends with the nutrition they deserve!
+          Provide your beloved pets with premium, nutritious food designed to
+          keep them healthy, active, and happy.
         </p>
 
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
@@ -58,7 +99,7 @@ const FoodSection = () => {
                   onClick={() => handleBuyNow(food)}
                   className="btn btn-primary w-full mt-4 hover:scale-105 transition duration-300"
                 >
-                Add to Cart 🛒
+                  Add to Cart 🛒
                 </button>
               </div>
             </div>
