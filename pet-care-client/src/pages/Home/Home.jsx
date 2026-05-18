@@ -1,10 +1,11 @@
 import React from "react";
-import { FaPaw } from "react-icons/fa";
+import { FaPaw, FaMapMarkerAlt } from "react-icons/fa";
 import { GiDogHouse } from "react-icons/gi";
 import { MdPets } from "react-icons/md";
-import { useNavigate } from "react-router-dom";
-
+import { Link, useNavigate } from "react-router-dom";
 import AdoptionSection from "./AdoptionSection";
+import petsJson from "../../data/PetDogs.json";
+
 import sideCat from "../../assets/side cat.jpg";
 
 import Reviews from "./Reviews";
@@ -37,48 +38,77 @@ const Home = () => {
 
   return (
     <>
-      {/* HERO */}
+      {/* ================= HERO SECTION ================= */}
       <section className="-mt-10">
         <div
           className="min-h-screen bg-cover bg-center relative flex items-center"
           style={{ backgroundImage: `url(${sideCat})` }}
         >
-          <div className="absolute inset-0 bg-black/60"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-black/30"></div>
 
           <div className="relative z-10 container mx-auto px-6 text-white">
-            <h1 className="text-4xl lg:text-6xl font-bold mb-6">
-              Welcome to PetCare
-            </h1>
+            <div className="max-w-2xl">
+              <h1 className="text-4xl lg:text-6xl font-extrabold mb-6 leading-tight">
+                Welcome to PetCare
+              </h1>
 
-            <p className="mb-6 text-gray-200">
-              Pet adoption and care platform
-            </p>
+              <p className="mb-6 text-lg text-gray-200 leading-relaxed">
+                Your trusted platform for pet adoption, grooming, and pet care
+                services. Find your perfect furry companion today.
+              </p>
 
-            <button
-              onClick={() => navigate("/add-adoption")}
-              className="px-6 py-3 bg-cyan-500 rounded-xl"
-            >
-              + Add Your Pet
-            </button>
+              <div className="flex flex-wrap gap-4">
+              
 
-            <div className="grid sm:grid-cols-3 gap-4 mt-10">
-              {stats.map((s) => (
-                <div key={s.id} className="bg-white/80 p-4 rounded-xl text-center">
-                  {s.icon}
-                  <p className="font-bold">{s.value}</p>
-                  <p>{s.label}</p>
-                </div>
-              ))}
+                <button
+                  onClick={() => navigate("/add-adoption")}
+                  className="px-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-600 text-white rounded-xl shadow-lg hover:scale-105 transition duration-300"
+                >
+                  + Add Your Pet
+                </button>
+              </div>
+
+              {/* Stats */}
+              <div className="grid gap-4 sm:grid-cols-3 mt-10">
+                {stats.map((item) => (
+                  <div
+                    key={item.id}
+                    className="rounded-2xl bg-white/90 backdrop-blur-md shadow-lg py-4 px-3 text-center hover:scale-105 transition duration-300"
+                  >
+                    <div className="flex items-center justify-center mb-2">
+                      {item.icon}
+                    </div>
+
+                    <p className="text-lg font-semibold text-slate-900">
+                      {item.value}
+                    </p>
+
+                    <p className="text-xs font-medium text-slate-500">
+                      {item.label}
+                    </p>
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-8">
+                <p className="text-gray-200 text-base">
+                  Want to rehome your pet safely and find a loving family?
+                </p>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ADOPTION SECTION (NOW CLEAN COMPONENT) */}
-      <AdoptionSection />
-
+     {/* ================= ADOPTION SECTION ================= */}
+       <AdoptionSection />
+      {/* ================= PET FOOD SECTION ================= */}
       <FoodSection />
+
+      {/* ================= SERVICES SECTION ================= */}
       <ServicesSection />
+
+      {/* ================= REVIEWS SECTION ================= */}
       <Reviews />
     </>
   );
