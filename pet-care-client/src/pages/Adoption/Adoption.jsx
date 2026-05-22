@@ -25,6 +25,15 @@ const Adoption = () => {
             Give a loving home to pets waiting for care and affection.
           </p>
 
+          {/* FACEBOOK LOADER */}
+          <div className="flex justify-center mb-6">
+            <div className="flex gap-2">
+              <span className="w-3 h-3 bg-cyan-500 rounded-full animate-bounce"></span>
+              <span className="w-3 h-3 bg-cyan-500 rounded-full animate-bounce [animation-delay:0.2s]"></span>
+              <span className="w-3 h-3 bg-cyan-500 rounded-full animate-bounce [animation-delay:0.4s]"></span>
+            </div>
+          </div>
+
           {/* ADD BUTTON (CENTER TOP) */}
           <Link to="/add-adoption">
             <button className="px-6 py-3 bg-cyan-500 text-white rounded-xl hover:bg-cyan-600 transition">
